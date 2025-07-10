@@ -5,9 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CKC.bet - Promoções VIP Exclusivas</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+        
         body {
             font-family: 'Montserrat', 'Arial', sans-serif;
-            background: linear-gradient(135deg, #6a0dad 0%, #9c27b0 30%, #ff9800 70%, #ffc107 100%);
+            background: linear-gradient(135deg, 
+                #6a0dad 0%, 
+                #9c27b0 20%, 
+                #e91e63 40%, 
+                #ff5722 60%, 
+                #ffeb3b 80%, 
+                #4caf50 100%);
             color: white;
             text-align: center;
             margin: 0;
@@ -20,6 +28,7 @@
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             overflow-x: hidden;
+            position: relative;
         }
         
         @keyframes gradientBG {
@@ -31,13 +40,14 @@
         .container {
             max-width: 800px;
             padding: 30px;
-            background-color: rgba(106, 13, 173, 0.85);
+            background-color: rgba(20, 20, 30, 0.7);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 215, 0, 0.5);
             position: relative;
             overflow: hidden;
+            z-index: 10;
         }
         
         .container::before {
@@ -47,7 +57,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%);
             z-index: -1;
             animation: rotate 20s linear infinite;
         }
@@ -62,17 +72,19 @@
             height: auto;
             border-radius: 15px;
             margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-            border: 2px solid rgba(255, 215, 0, 0.5);
-            transition: transform 0.5s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+            border: 2px solid rgba(255, 215, 0, 0.7);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
         }
         
         .promo-image:hover {
-            transform: scale(1.02);
+            transform: scale(1.02) rotate(1deg);
+            box-shadow: 0 12px 30px rgba(255, 215, 0, 0.4);
         }
         
         .register-btn {
-            background: linear-gradient(to right, #9c27b0, #ff9800);
+            background: linear-gradient(45deg, #9c27b0, #ff9800, #ff5722, #ffeb3b);
+            background-size: 300% 300%;
             color: white;
             border: none;
             padding: 18px 45px;
@@ -82,47 +94,164 @@
             cursor: pointer;
             text-decoration: none;
             transition: all 0.4s ease;
-            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
             position: relative;
             overflow: hidden;
             text-transform: uppercase;
             letter-spacing: 1px;
-            border: 2px solid rgba(255, 215, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: gradientShift 4s ease infinite;
+            z-index: 1;
         }
         
         .register-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 152, 0, 0.6);
-            background: linear-gradient(to right, #ff9800, #9c27b0);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 152, 0, 0.8);
+            animation: gradientShift 2s ease infinite;
         }
         
         .register-btn:active {
             transform: translateY(1px);
         }
         
-        .register-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: rotate(45deg);
-            transition: all 0.6s ease;
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
-        .register-btn:hover::after {
-            left: 100%;
+        .register-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(255,255,255,0.1) 0%, 
+                rgba(255,255,255,0.3) 50%, 
+                rgba(255,255,255,0.1) 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+            z-index: -1;
+        }
+        
+        .register-btn:hover::before {
+            transform: translateX(100%);
         }
         
         /* Floating particles */
         .particle {
             position: absolute;
-            background: rgba(255, 215, 0, 0.6);
             border-radius: 50%;
             pointer-events: none;
-            z-index: -1;
+            z-index: 1;
+            opacity: 0.8;
+            filter: blur(1px);
+        }
+        
+        /* Stars */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            animation: falling linear infinite;
+            filter: blur(0.5px);
+        }
+        
+        @keyframes falling {
+            0% { 
+                transform: translateY(-100px) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateY(calc(100vh + 100px)) rotate(360deg) scale(1);
+                opacity: 0;
+            }
+        }
+        
+        /* Snowflakes */
+        .snowflake {
+            position: absolute;
+            color: white;
+            font-size: 1em;
+            pointer-events: none;
+            z-index: 1;
+            animation: snowing linear infinite, sway 3s ease-in-out infinite alternate;
+            opacity: 0.8;
+        }
+        
+        @keyframes snowing {
+            0% { 
+                transform: translateY(-100px) translateX(0);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateY(calc(100vh + 100px)) translateX(50px);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes sway {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(20px); }
+        }
+        
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(0);
+            pointer-events: none;
+            z-index: 100;
+            animation: ripple 1s ease-out;
+        }
+        
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        /* Colorful floating shapes */
+        .floating-shape {
+            position: absolute;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+            filter: blur(1px);
+            animation: floatShape linear infinite;
+        }
+        
+        @keyframes floatShape {
+            0% { 
+                transform: translate(0, 0) rotate(0deg);
+                opacity: 0.6;
+            }
+            25% { 
+                transform: translate(50px, 30px) rotate(90deg);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translate(100px, 0) rotate(180deg);
+                opacity: 0.6;
+            }
+            75% { 
+                transform: translate(50px, -30px) rotate(270deg);
+                opacity: 0.4;
+            }
+            100% { 
+                transform: translate(0, 0) rotate(360deg);
+                opacity: 0.6;
+            }
         }
         
         /* Responsive adjustments */
@@ -148,19 +277,27 @@
     <script>
         // Create floating particles
         function createParticles() {
-            const colors = ['rgba(255,215,0,0.6)', 'rgba(156,39,176,0.6)', 'rgba(255,152,0,0.6)'];
+            const colors = [
+                'rgba(255,215,0,0.8)', 
+                'rgba(156,39,176,0.8)', 
+                'rgba(255,152,0,0.8)',
+                'rgba(76,175,80,0.8)',
+                'rgba(33,150,243,0.8)',
+                'rgba(233,30,99,0.8)'
+            ];
             
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 30; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 
                 // Random properties
-                const size = Math.random() * 10 + 5;
+                const size = Math.random() * 15 + 5;
                 const posX = Math.random() * window.innerWidth;
                 const posY = Math.random() * window.innerHeight;
                 const color = colors[Math.floor(Math.random() * colors.length)];
-                const duration = Math.random() * 15 + 10;
+                const duration = Math.random() * 20 + 10;
                 const delay = Math.random() * 5;
+                const shape = Math.random() > 0.5 ? '50%' : '0';
                 
                 // Apply properties
                 particle.style.width = `${size}px`;
@@ -168,6 +305,7 @@
                 particle.style.left = `${posX}px`;
                 particle.style.top = `${posY}px`;
                 particle.style.background = color;
+                particle.style.borderRadius = shape;
                 particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
                 
                 document.body.appendChild(particle);
@@ -176,22 +314,149 @@
                 const style = document.createElement('style');
                 style.innerHTML = `
                     @keyframes float {
-                        0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
-                        50% { transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(180deg); opacity: 0.7; }
-                        100% { transform: translate(0, 0) rotate(360deg); opacity: 1; }
+                        0% { transform: translate(0, 0) rotate(0deg); opacity: 0.8; }
+                        25% { transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 100 - 50}px) rotate(90deg); }
+                        50% { transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 100 - 50}px) rotate(180deg); opacity: 0.6; }
+                        75% { transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 100 - 50}px) rotate(270deg); }
+                        100% { transform: translate(0, 0) rotate(360deg); opacity: 0.8; }
                     }
                 `;
                 document.head.appendChild(style);
             }
         }
         
-        // Initialize particles when window loads
-        window.addEventListener('load', createParticles);
+        // Create stars
+        function createStars() {
+            for (let i = 0; i < 15; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                const size = Math.random() * 4 + 1;
+                const posX = Math.random() * window.innerWidth;
+                const duration = Math.random() * 10 + 5;
+                const delay = Math.random() * 5;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${posX}px`;
+                star.style.animationDuration = `${duration}s`;
+                star.style.animationDelay = `${delay}s`;
+                
+                // Add twinkle effect
+                star.style.boxShadow = `0 0 ${size*2}px ${size/2}px rgba(255, 255, 255, 0.7)`;
+                
+                document.body.appendChild(star);
+            }
+        }
         
-        // Make particles responsive
-        window.addEventListener('resize', function() {
-            document.querySelectorAll('.particle').forEach(p => p.remove());
+        // Create snowflakes
+        function createSnowflakes() {
+            const snowflakes = ['❄', '✻', '✺', '❅', '❆'];
+            
+            for (let i = 0; i < 20; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                
+                const size = Math.random() * 1.5 + 0.5;
+                const posX = Math.random() * window.innerWidth;
+                const duration = Math.random() * 15 + 10;
+                const delay = Math.random() * 5;
+                const flake = snowflakes[Math.floor(Math.random() * snowflakes.length)];
+                
+                snowflake.textContent = flake;
+                snowflake.style.left = `${posX}px`;
+                snowflake.style.fontSize = `${size}em`;
+                snowflake.style.animationDuration = `${duration}s`;
+                snowflake.style.animationDelay = `${delay}s`;
+                
+                document.body.appendChild(snowflake);
+            }
+        }
+        
+        // Create colorful floating shapes
+        function createFloatingShapes() {
+            const colors = [
+                'rgba(255,0,0,0.4)', 
+                'rgba(0,255,0,0.4)', 
+                'rgba(0,0,255,0.4)',
+                'rgba(255,255,0,0.4)',
+                'rgba(255,0,255,0.4)',
+                'rgba(0,255,255,0.4)'
+            ];
+            
+            for (let i = 0; i < 10; i++) {
+                const shape = document.createElement('div');
+                shape.classList.add('floating-shape');
+                
+                const size = Math.random() * 100 + 50;
+                const posX = Math.random() * window.innerWidth;
+                const posY = Math.random() * window.innerHeight;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const duration = Math.random() * 30 + 20;
+                const delay = Math.random() * 10;
+                const shapeType = Math.random() > 0.5 ? '50%' : '0';
+                
+                shape.style.width = `${size}px`;
+                shape.style.height = `${size}px`;
+                shape.style.left = `${posX}px`;
+                shape.style.top = `${posY}px`;
+                shape.style.background = color;
+                shape.style.borderRadius = shapeType;
+                shape.style.animationDuration = `${duration}s`;
+                shape.style.animationDelay = `${delay}s`;
+                
+                document.body.appendChild(shape);
+            }
+        }
+        
+        // Ripple effect on click/touch
+        function createRipple(e) {
+            const ripple = document.createElement('div');
+            ripple.classList.add('ripple');
+            
+            const size = Math.max(window.innerWidth, window.innerHeight) / 4;
+            const posX = e.clientX || e.touches[0].clientX;
+            const posY = e.clientY || e.touches[0].clientY;
+            
+            ripple.style.width = `${size}px`;
+            ripple.style.height = `${size}px`;
+            ripple.style.left = `${posX - size/2}px`;
+            ripple.style.top = `${posY - size/2}px`;
+            
+            document.body.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 1000);
+        }
+        
+        // Initialize all effects when window loads
+        window.addEventListener('load', function() {
             createParticles();
+            createStars();
+            createSnowflakes();
+            createFloatingShapes();
+        });
+        
+        // Make elements responsive
+        window.addEventListener('resize', function() {
+            document.querySelectorAll('.particle, .star, .snowflake, .floating-shape').forEach(el => el.remove());
+            createParticles();
+            createStars();
+            createSnowflakes();
+            createFloatingShapes();
+        });
+        
+        // Add ripple effect on click/touch
+        document.addEventListener('click', createRipple);
+        document.addEventListener('touchstart', createRipple);
+        
+        // Add floating effect to container on mouse move
+        document.addEventListener('mousemove', function(e) {
+            const container = document.querySelector('.container');
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
     </script>
 </body>
