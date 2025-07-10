@@ -2,10 +2,28 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CKC.bet - Promoções VIP Exclusivas</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+        
+        :root {
+            --button-padding: 14px 35px;
+            --button-font-size: 18px;
+            --container-width: 90%;
+            --container-padding: 20px;
+            --image-margin: 20px 0;
+        }
+        
+        @media (min-width: 768px) {
+            :root {
+                --button-padding: 18px 45px;
+                --button-font-size: 20px;
+                --container-width: 800px;
+                --container-padding: 30px;
+                --image-margin: 30px 0;
+            }
+        }
         
         body {
             font-family: 'Montserrat', 'Arial', sans-serif;
@@ -28,7 +46,11 @@
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             overflow-x: hidden;
-            position: relative;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
         
         @keyframes gradientBG {
@@ -38,8 +60,9 @@
         }
         
         .container {
+            width: var(--container-width);
             max-width: 800px;
-            padding: 30px;
+            padding: var(--container-padding);
             background-color: rgba(20, 20, 30, 0.7);
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -48,6 +71,8 @@
             position: relative;
             overflow: hidden;
             z-index: 10;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out;
         }
         
         .container::before {
@@ -71,10 +96,11 @@
             max-width: 100%;
             height: auto;
             border-radius: 15px;
-            margin-bottom: 30px;
+            margin: var(--image-margin);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
             border: 2px solid rgba(255, 215, 0, 0.7);
             transition: transform 0.5s ease, box-shadow 0.5s ease;
+            transform-style: preserve-3d;
         }
         
         .promo-image:hover {
@@ -87,8 +113,8 @@
             background-size: 300% 300%;
             color: white;
             border: none;
-            padding: 18px 45px;
-            font-size: 20px;
+            padding: var(--button-padding);
+            font-size: var(--button-font-size);
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
@@ -102,6 +128,8 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
             animation: gradientShift 4s ease infinite;
             z-index: 1;
+            display: inline-block;
+            transform-style: preserve-3d;
         }
         
         .register-btn:hover {
@@ -111,7 +139,7 @@
         }
         
         .register-btn:active {
-            transform: translateY(1px);
+            transform: translateY(1px) scale(0.98);
         }
         
         @keyframes gradientShift {
@@ -148,6 +176,7 @@
             z-index: 1;
             opacity: 0.8;
             filter: blur(1px);
+            will-change: transform;
         }
         
         /* Stars */
@@ -159,6 +188,7 @@
             z-index: 1;
             animation: falling linear infinite;
             filter: blur(0.5px);
+            will-change: transform;
         }
         
         @keyframes falling {
@@ -183,6 +213,8 @@
             z-index: 1;
             animation: snowing linear infinite, sway 3s ease-in-out infinite alternate;
             opacity: 0.8;
+            will-change: transform;
+            user-select: none;
         }
         
         @keyframes snowing {
@@ -212,6 +244,7 @@
             pointer-events: none;
             z-index: 100;
             animation: ripple 1s ease-out;
+            will-change: transform, opacity;
         }
         
         @keyframes ripple {
@@ -229,6 +262,7 @@
             opacity: 0.6;
             filter: blur(1px);
             animation: floatShape linear infinite;
+            will-change: transform;
         }
         
         @keyframes floatShape {
@@ -254,17 +288,42 @@
             }
         }
         
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
+        /* Gyro indicator for debugging */
+        .gyro-indicator {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            z-index: 1000;
+            display: none;
+        }
+        
+        /* Mobile-specific optimizations */
+        @media (max-width: 767px) {
+            body {
+                background-attachment: fixed;
+            }
+            
             .container {
-                width: 90%;
-                padding: 20px;
+                transform: scale(0.95);
+                transition: transform 0.3s ease;
+            }
+            
+            .container.active {
+                transform: scale(1);
             }
             
             .register-btn {
-                padding: 15px 35px;
-                font-size: 18px;
+                padding: 16px 40px;
             }
+        }
+        
+        /* Prevent zooming on mobile */
+        input, textarea, select {
+            font-size: 16px;
         }
     </style>
 </head>
@@ -273,8 +332,13 @@
         <img src="https://iili.io/FESBPHv.png" alt="Promoções VIP CKC.bet" class="promo-image">
         <a href="https://x65mw37.com?ch=37717" class="register-btn">REGISTER AGORA</a>
     </div>
+    
+    <div class="gyro-indicator">Gyro: 0, 0</div>
 
     <script>
+        // Enhanced mobile detection
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
         // Create floating particles
         function createParticles() {
             const colors = [
@@ -286,12 +350,14 @@
                 'rgba(233,30,99,0.8)'
             ];
             
-            for (let i = 0; i < 30; i++) {
+            const particleCount = isMobile ? 20 : 30;
+            
+            for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 
                 // Random properties
-                const size = Math.random() * 15 + 5;
+                const size = Math.random() * (isMobile ? 10 : 15) + 5;
                 const posX = Math.random() * window.innerWidth;
                 const posY = Math.random() * window.innerHeight;
                 const color = colors[Math.floor(Math.random() * colors.length)];
@@ -327,7 +393,9 @@
         
         // Create stars
         function createStars() {
-            for (let i = 0; i < 15; i++) {
+            const starCount = isMobile ? 10 : 15;
+            
+            for (let i = 0; i < starCount; i++) {
                 const star = document.createElement('div');
                 star.classList.add('star');
                 
@@ -352,8 +420,9 @@
         // Create snowflakes
         function createSnowflakes() {
             const snowflakes = ['❄', '✻', '✺', '❅', '❆'];
+            const flakeCount = isMobile ? 15 : 20;
             
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < flakeCount; i++) {
                 const snowflake = document.createElement('div');
                 snowflake.classList.add('snowflake');
                 
@@ -384,11 +453,13 @@
                 'rgba(0,255,255,0.4)'
             ];
             
-            for (let i = 0; i < 10; i++) {
+            const shapeCount = isMobile ? 5 : 10;
+            
+            for (let i = 0; i < shapeCount; i++) {
                 const shape = document.createElement('div');
                 shape.classList.add('floating-shape');
                 
-                const size = Math.random() * 100 + 50;
+                const size = Math.random() * (isMobile ? 50 : 100) + 50;
                 const posX = Math.random() * window.innerWidth;
                 const posY = Math.random() * window.innerHeight;
                 const color = colors[Math.floor(Math.random() * colors.length)];
@@ -415,8 +486,10 @@
             ripple.classList.add('ripple');
             
             const size = Math.max(window.innerWidth, window.innerHeight) / 4;
-            const posX = e.clientX || e.touches[0].clientX;
-            const posY = e.clientY || e.touches[0].clientY;
+            const posX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+            const posY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+            
+            if (posX === 0 && posY === 0) return;
             
             ripple.style.width = `${size}px`;
             ripple.style.height = `${size}px`;
@@ -430,12 +503,88 @@
             }, 1000);
         }
         
+        // Gyroscope effect for mobile devices
+        function setupGyro() {
+            if (!isMobile || !window.DeviceOrientationEvent) {
+                console.log("Gyroscope not supported");
+                return;
+            }
+            
+            let lastBeta = 0;
+            let lastGamma = 0;
+            const container = document.querySelector('.container');
+            const indicator = document.querySelector('.gyro-indicator');
+            const maxTilt = 15; // Maximum tilt angle in degrees
+            
+            // Request permission for iOS 13+ devices
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission()
+                    .then(response => {
+                        if (response === 'granted') {
+                            window.addEventListener('deviceorientation', handleOrientation);
+                        }
+                    })
+                    .catch(console.error);
+            } else {
+                window.addEventListener('deviceorientation', handleOrientation);
+            }
+            
+            function handleOrientation(event) {
+                const beta = event.beta;  // -180 to 180 (front/back tilt)
+                const gamma = event.gamma; // -90 to 90 (left/right tilt)
+                
+                // Smooth the values to reduce jitter
+                const smoothBeta = lastBeta * 0.7 + beta * 0.3;
+                const smoothGamma = lastGamma * 0.7 + gamma * 0.3;
+                
+                lastBeta = smoothBeta;
+                lastGamma = smoothGamma;
+                
+                // Limit the tilt range
+                const tiltX = Math.max(Math.min(smoothGamma, maxTilt), -maxTilt);
+                const tiltY = Math.max(Math.min(smoothBeta, maxTilt), -maxTilt);
+                
+                // Apply the tilt to the container
+                container.style.transform = `rotateY(${tiltX}deg) rotateX(${tiltY}deg)`;
+                
+                // For debugging
+                indicator.textContent = `Gyro: ${tiltX.toFixed(1)}, ${tiltY.toFixed(1)}`;
+            }
+        }
+        
+        // Mouse move effect for desktop
+        function setupMouseTilt() {
+            if (isMobile) return;
+            
+            const container = document.querySelector('.container');
+            
+            document.addEventListener('mousemove', function(e) {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+            
+            // Reset position when mouse leaves
+            document.addEventListener('mouseleave', function() {
+                container.style.transform = 'rotateY(0deg) rotateX(0deg)';
+            });
+        }
+        
         // Initialize all effects when window loads
         window.addEventListener('load', function() {
             createParticles();
             createStars();
             createSnowflakes();
             createFloatingShapes();
+            setupGyro();
+            setupMouseTilt();
+            
+            // Activate container with slight delay for mobile
+            if (isMobile) {
+                setTimeout(() => {
+                    document.querySelector('.container').classList.add('active');
+                }, 300);
+            }
         });
         
         // Make elements responsive
@@ -451,12 +600,14 @@
         document.addEventListener('click', createRipple);
         document.addEventListener('touchstart', createRipple);
         
-        // Add floating effect to container on mouse move
-        document.addEventListener('mousemove', function(e) {
-            const container = document.querySelector('.container');
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-            container.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        // Prevent default touch behavior
+        document.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+        
+        // Disable zooming on mobile
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
         });
     </script>
 </body>
